@@ -1,3 +1,3 @@
 # Proyecto final. Programación Orientada a Objetos. UNL-FICH.
 
-## Sistema de Gestión Empresarial.
+## Sistema de gestión de stock.
