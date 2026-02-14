@@ -6,17 +6,19 @@ using namespace std;
 
 class Empresa {
 private:
+	int m_idEmpresa;
 	string m_nombre;
 	string m_correo;
-	int m_telefono;
+	string m_telefono;
 	vector<Producto> Productos;
+	
 public:
-	Empresa(string nombre, string correo, int telefono) : m_nombre(nombre), m_correo(correo),
-		m_telefono(telefono){}
-	bool AgregarProducto();
+	Empresa(int idEmpresa, const string &nombre, const string &correo, const string &telefono) :
+		m_idEmpresa(idEmpresa), m_nombre(nombre), m_correo(correo), m_telefono(telefono){}
+	bool AgregarProducto(const string &nombre, int id, int stock, float precio);
 	bool QuitarProducto();
-	bool VendeProducto();
-	Producto BuscarProducto(string nombre, int id);
+	bool VenderProducto();
+	bool BuscarProducto(const string &nombre, int id);
 };
 
 bool Empresa::AgregarProducto(const string &nombre, int id, int stock, float precio) {
