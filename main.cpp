@@ -4,6 +4,7 @@
 #include <fstream>
 #include <cstdio>
 #include <cerrno>
+#include <cstring>
 using namespace std;
 
 // 	Usamos esta función para revisar si el archivo no existe para crear uno
@@ -30,8 +31,11 @@ int RevisarEstadoArchivo (string direc) {
 	}
 }
 
-void CargarDatosEnMemoria (fstream &archivo, vector<Empresa> &emp) {
-	if (archivo.peek() == EOF) return;
+void CargarDatosEnMemoria (vector<Empresa> &emp) {
+	fstream archivo("lista_prov.dat", ios::binary | ios::in);
+	if (!archivo.is_open()) {
+		throw runtime_error("No se pudo abrir el archivo");
+	}
 	while (true) {
 		int idEmpresa;
 		char auxNombre[256];
@@ -54,7 +58,7 @@ void CargarDatosEnMemoria (fstream &archivo, vector<Empresa> &emp) {
 		string correo = auxCorreo;
 		string telefono = auxTelefono;
 		
-		Empresa nuevaEmpresa(idEmpresa, nombre, correo, telefono);
+		Empresa nuevaEmpresa(idEmpresa, nombre, correo, telefono, CantidadProductos);
 		
 		for(int i=0;i<CantidadProductos;i++) {
 			char auxNombreProd[256];
@@ -68,14 +72,80 @@ void CargarDatosEnMemoria (fstream &archivo, vector<Empresa> &emp) {
 			string NombreProd = auxNombreProd;
 			nuevaEmpresa.AgregarProducto(NombreProd, idProducto, stock, precio);
 		}
+		emp.push_back(nuevaEmpresa);
 	}
+	archivo.close();
 }
 
+void GuardarCambios(vector<Empresa> &empresas) {
+	if (empresas.size() == 0)
+		throw runtime_error("No se puede guardar sin cargar los datos antes");
+	
+	ofstream archivo("lista_prov.dat", ios::binary | ios::trunc);
+	
+	for (Empresa &emp : empresas) {
+		int id = emp.ObtenerID();
+		
+		string auxNombre = emp.ObtenerNombre();
+		char Nombre[256];
+		strcpy(Nombre, auxNombre.c_str());
+		
+		string auxCorreo = emp.ObtenerCorreo();
+		char Correo[256];
+		strcpy(Correo, auxCorreo.c_str());
+		
+		string auxTelefono = emp.ObtenerTelefono();
+		char Telefono[20];
+		strcpy(Telefono, auxTelefono.c_str());
+		
+		int cantidadProductos = emp.ObtenerCantidadProductos(); 
 
-
+		archivo.write((char*) &id, sizeof(id));
+		archivo.write(Nombre, sizeof(Nombre));
+		archivo.write(Correo, sizeof(Correo));
+		archivo.write(Telefono, sizeof(Telefono));
+		archivo.write((char*) &cantidadProductos, sizeof(cantidadProductos));
+		
+		vector<Producto> productos = emp.ObtenerListaProductos();
+		for(Producto &p : productos) { 
+			string auxNombreProd = p.ObtenerNombre();
+			char NombreProd[256];
+			strcpy(NombreProd, auxNombreProd.c_str());
+			
+			int idProd = p.ObtenerID();
+			int stockProd = p.ObtenerStock();
+			float precioProd = p.ObtenerPrecio();
+			
+			archivo.write(NombreProd, sizeof(NombreProd));
+			archivo.write((char*) &idProd, sizeof(idProd));
+			archivo.write((char*) &stockProd, sizeof(stockProd));
+			archivo.write((char*) &precioProd, sizeof(precioProd));
+		}
+		
+	}
+	archivo.close();
+}
+	
+void MostrarEmpresa(vector<Empresa> &emp, int id = 0,const string &nombre="") {
+	if (id != 0 || nombre != ""){
+		
+		
+		//return;
+	}
+	for(int i=0;i<emp.size();i++) { 
+		cout<<emp[i].ObtenerID()<<": "<<emp[i].ObtenerNombre()<<". Tel: "<<emp[i].ObtenerTelefono();
+		cout<<endl;
+		cout<<"Correo: "<<emp[i].ObtenerCorreo()<<endl<<"Cantidad de Productos: "<<emp[i].ObtenerCantidadProductos()<<endl<<endl;
+	}
+}
+	
+	
+	
+	
+	
 int main() {
 	int EstadoArchivo = RevisarEstadoArchivo("lista_prov.dat");
-	// 0 = funciona;
+	// 0 = existe y funciona;
 	// 1 = no existe y 2 = no funciona
 	if (EstadoArchivo) {
 		if (EstadoArchivo == 1) {
@@ -86,15 +156,13 @@ int main() {
 			throw runtime_error("Error: el archivo no puede abrirse");
 		}
 	}
-
-	fstream CargaInicial("lista_prov.dat", ios::binary | ios::in);
-	if (!CargaInicial.is_open()) {
-		throw runtime_error("No se pudo abrir el archivo");
-	}
 	
 	vector<Empresa> empresas;
-	CargarDatosEnMemoria(CargaInicial, empresas);
-	CargaInicial.close();
+	
+	CargarDatosEnMemoria(empresas);
+	
+	MostrarEmpresa(empresas);
+	
 	
 	return 0;
 }
