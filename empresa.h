@@ -18,3 +18,18 @@ public:
 	bool VendeProducto();
 	Producto BuscarProducto(string nombre, int id);
 };
+
+bool Empresa::AgregarProducto(const string &nombre, int id, int stock, float precio) {
+	if (BuscarProducto(nombre, id)) return false;
+	
+	Producto auxProd(nombre, id, stock, precio);
+	Productos.push_back(auxProd);
+	return true;
+}
+
+bool Empresa::BuscarProducto(const string &nombre, int id) {
+	for (Producto p : Productos) {
+		if (p.ObtenerID() == id || p.ObtenerNombre() == nombre) return true;
+	}
+	return false;
+}
