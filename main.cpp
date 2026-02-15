@@ -27,7 +27,7 @@ int RevisarEstadoArchivo (string direc) {
 		return 2;
 	default:
 		// Otro error (disco lleno, demasiados archivos abiertos, etc.)
-		return 2; 
+		return 3; 
 	}
 }
 
@@ -148,12 +148,15 @@ int main() {
 	// 0 = existe y funciona;
 	// 1 = no existe y 2 = no funciona
 	if (EstadoArchivo) {
-		if (EstadoArchivo == 1) {
+		switch (EstadoArchivo) {
+		case 1: {
 			ofstream crear("lista_prov.dat", ios::binary);
 			crear.close();
-		}
-		if (EstadoArchivo == 2) {
-			throw runtime_error("Error: el archivo no puede abrirse");
+			}
+		case 2: 
+			throw runtime_error("Error: No se tiene permiso para abrir el archivo");
+		case 3:
+			throw runtime_error("Error: el archivo no pudo abrirse.");
 		}
 	}
 	
