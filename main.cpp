@@ -137,6 +137,11 @@ void GuardarCambios(vector<Empresa> &empresas) {
 }
 	
 void MostrarEmpresa(vector<Empresa> &emp, int id = 0,const string &nombre="") {
+	if (emp.empty()) {
+		cout<<"No hay empresas cargadas";
+		return;
+	}
+	
 	if (id != 0 || nombre != ""){
 		int aux = -1;
 		for(size_t i=0;i<emp.size();i++) { 
@@ -148,14 +153,9 @@ void MostrarEmpresa(vector<Empresa> &emp, int id = 0,const string &nombre="") {
 			cout<<"No se encontró la empresa";
 			return;
 		}
-		cout<<emp[aux].ObtenerID()<<": "<<emp[aux].ObtenerNombre()<<". Tel: "<<emp[aux].ObtenerTelefono();
-		cout<<endl;
+		cout<<emp[aux].ObtenerID()<<": "<<emp[aux].ObtenerNombre()<<". Tel: "<<emp[aux].ObtenerTelefono()<<endl;
 		cout<<"Correo: "<<emp[aux].ObtenerCorreo()<<endl<<"Cantidad de Productos: "<<emp[aux].ObtenerCantidadProductos()<<endl<<endl;
 		cout<<endl<<endl;
-		return;
-	}
-	if (emp.empty()) {
-		cout<<"No hay empresas cargadas";
 		return;
 	}
 	for(size_t i=0;i<emp.size();i++) { 
@@ -165,8 +165,6 @@ void MostrarEmpresa(vector<Empresa> &emp, int id = 0,const string &nombre="") {
 		cout<<endl<<endl;
 	}
 }
-	
-	
 	
 int main() {
 	vector<Empresa> empresas;
