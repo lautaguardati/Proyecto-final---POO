@@ -38,15 +38,16 @@ void CargarDatosEnMemoria (vector<Empresa> &emp) {
 		
 		for(int i=0;i<CantidadProductos;i++) {
 			char auxNombreProd[256] = {0};
-			int idProducto, stock;
+			int idProducto, stock, cantidadVendida;
 			double precio;
 			archivo.read(auxNombreProd, sizeof(auxNombreProd));
 			archivo.read((char*) &idProducto, sizeof(idProducto));
 			archivo.read((char*) &stock, sizeof(stock));
 			archivo.read((char*) &precio, sizeof(precio));
+			archivo.read((char*) &cantidadVendida, sizeof(cantidadVendida));
 			
 			string NombreProd = auxNombreProd;
-			nuevaEmpresa.AgregarProducto(NombreProd, idProducto, stock, precio);
+			nuevaEmpresa.AgregarProducto(NombreProd, idProducto, stock, precio, cantidadVendida);
 		}
 		emp.push_back(nuevaEmpresa);
 	}
