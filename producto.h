@@ -14,5 +14,6 @@ public:
 	std::string ObtenerNombre(){return m_nombre;};
 	int ObtenerID(){return m_id;};
 	int ObtenerStock(){return m_stock;};
-	int ObtenerPrecio(){return m_precio;};
+	float ObtenerPrecio(){return m_precio;};
+	void ActualizarStock(int cantidad) {m_stock = cantidad;};
 };
