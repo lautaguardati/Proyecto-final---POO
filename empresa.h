@@ -20,7 +20,7 @@ public:
 	int ObtenerCantidadProductos();
 	std::vector<Producto>& ObtenerListaProductos() { return Productos; };
 	
-	bool AgregarProducto(const std::string &nombre, int id, int stock, float precio);
+	bool AgregarProducto(const std::string &nombre, int id, int stock, double precio);
 	bool QuitarProducto();
 	bool VenderProducto();
 	bool ExisteProducto(const std::string &nombre, int id);
@@ -31,7 +31,7 @@ inline int Empresa::ObtenerCantidadProductos() {
 	return Productos.size();
 }
 
-inline bool Empresa::AgregarProducto(const std::string &nombre, int id, int stock, float precio) {
+inline bool Empresa::AgregarProducto(const std::string &nombre, int id, int stock, double precio) {
 	if (ExisteProducto(nombre, id)) return false;
 	
 	Producto auxProd(nombre, id, stock, precio);
