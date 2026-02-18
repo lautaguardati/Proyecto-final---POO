@@ -7,7 +7,7 @@
 #include <cstring>
 using namespace std;
 
-// Función simplificada para verificar archivo
+
 bool ExisteArchivo(const string& nombre) {
 	ifstream archivo(nombre);
 	return archivo.good();
@@ -61,6 +61,9 @@ void CargarDatosEnMemoria (vector<Empresa> &emp) {
 }
 
 void GuardarCambios(vector<Empresa> &empresas) {
+	// Vamos a usar un guardado atómico. Usamos un archivo temporal para evitar perder
+	// datos ante un imprevisto (corte de luz, apagado inesperado, etc).
+	
 	string archivoTemporal = "lista_prov.tmp";
 	string archivoFinal = "lista_prov.dat";
 	if (empresas.empty())
@@ -112,6 +115,8 @@ void GuardarCambios(vector<Empresa> &empresas) {
 		}
 		
 	}
+	
+	
 	if (archivo.fail())	{
 		archivo.close();
 		remove(archivoTemporal.c_str()); // Borramos el archivo temporal corrupto
@@ -119,13 +124,12 @@ void GuardarCambios(vector<Empresa> &empresas) {
 	}
 	archivo.close();
 	
-	//Intercambiamos el archivo temporal por un binario nuevo.
-	if (remove(archivoFinal.c_str()) != 0) {
+	if (remove(archivoFinal.c_str()) != 0) { // Si falla borrar, puede ser porque no existía (primera vez).
 		if(ExisteArchivo(archivoFinal)) {
 			throw runtime_error("Error: no se puede borrar el archivo original");
 		}
 	}
-	
+	// Renombramos el archivo temporal y lo volvemos la base de datos
 	if (rename(archivoTemporal.c_str(), archivoFinal.c_str()) != 0) {
 		throw runtime_error("Error: se guardó el temporal pero no se pudo renombrar.");
 	}
