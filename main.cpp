@@ -20,16 +20,17 @@ void CargarDatosEnMemoria (vector<Empresa> &emp) {
 	}
 	while (true) {
 		int idEmpresa;
-		char auxNombre[256] = {0};
-		char auxCorreo[256] = {0};
-		char auxTelefono[20] = {0};
-		int CantidadProductos;
-		
+
 		archivo.read((char*) &idEmpresa, sizeof(idEmpresa));
 		// 	El .eof() aparentemente da "true" cuando se hace una lectura fallida de un archivo.
 		// Por eso lo ponemos después de leer el id. Si falla se corta la lectura del archivo y
 		// no se agregan empresas "basura" por error.
 		if (archivo.eof()) break;
+		
+		char auxNombre[256] = {0};
+		char auxCorreo[256] = {0};
+		char auxTelefono[20] = {0};
+		int CantidadProductos;
 		
 		archivo.read(auxNombre, sizeof(auxNombre));
 		archivo.read(auxCorreo, sizeof(auxCorreo));
@@ -60,11 +61,13 @@ void CargarDatosEnMemoria (vector<Empresa> &emp) {
 }
 
 void GuardarCambios(vector<Empresa> &empresas) {
+	string archivoTemporal = "lista_prov.tmp";
+	string archivoFinal = "lista_prov.dat";
 	if (empresas.empty())
 		throw runtime_error("No se puede guardar sin cargar los datos antes");
 	
-	ofstream archivo("lista_prov.dat", ios::binary | ios::trunc);
-	if (!archivo.is_open()) throw runtime_error("No se pudo abrir el archivo");
+	ofstream archivo(archivoTemporal, ios::binary | ios::trunc);
+	if (!archivo.is_open()) throw runtime_error("No se pudo crear el archivo temporal");
 	
 	for (Empresa &emp : empresas) {
 		int id = emp.ObtenerID();
@@ -109,13 +112,29 @@ void GuardarCambios(vector<Empresa> &empresas) {
 		}
 		
 	}
+	if (archivo.fail())	{
+		archivo.close();
+		remove(archivoTemporal.c_str()); // Borramos el archivo temporal corrupto
+		throw runtime_error("Error durante la escritura. No se modificaron los datos originales");
+	}
 	archivo.close();
+	
+	//Intercambiamos el archivo temporal por un binario nuevo.
+	if (remove(archivoFinal.c_str()) != 0) {
+		if(ExisteArchivo(archivoFinal)) {
+			throw runtime_error("Error: no se puede borrar el archivo original");
+		}
+	}
+	
+	if (rename(archivoTemporal.c_str(), archivoFinal.c_str()) != 0) {
+		throw runtime_error("Error: se guardó el temporal pero no se pudo renombrar.");
+	}
 }
 	
 void MostrarEmpresa(vector<Empresa> &emp, int id = 0,const string &nombre="") {
 	if (id != 0 || nombre != ""){
 		int aux = -1;
-		for(int i=0;i<emp.size();i++) { 
+		for(size_t i=0;i<emp.size();i++) { 
 			if(emp[i].ObtenerNombre() == nombre || emp[i].ObtenerID() == id) {
 				aux = i;
 			}
@@ -134,7 +153,7 @@ void MostrarEmpresa(vector<Empresa> &emp, int id = 0,const string &nombre="") {
 		cout<<"No hay empresas cargadas";
 		return;
 	}
-	for(int i=0;i<emp.size();i++) { 
+	for(size_t i=0;i<emp.size();i++) { 
 		cout<<emp[i].ObtenerID()<<": "<<emp[i].ObtenerNombre()<<". Tel: "<<emp[i].ObtenerTelefono();
 		cout<<endl;
 		cout<<"Correo: "<<emp[i].ObtenerCorreo()<<endl<<"Cantidad de Productos: "<<emp[i].ObtenerCantidadProductos()<<endl<<endl;
@@ -155,6 +174,7 @@ int main() {
 	}
 	MostrarEmpresa(empresas);
 	
+	GuardarCambios(empresas);
 	
 	
 	return 0;
