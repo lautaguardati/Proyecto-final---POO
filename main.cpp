@@ -162,22 +162,28 @@ void MostrarEmpresa(vector<Empresa> &emp, int id = 0,const string &nombre="") {
 int main() {
 	vector<Empresa> empresas;
 	string ruta = "lista_prov.dat";
-	/*
+	
+	// Try-catch para la carga
 	try {
-		
-		
-	};
-	*/
-	if (ExisteArchivo(ruta)) {
-		cout << "Cargando base de datos..." << endl;
-		CargarDatosEnMemoria(empresas);
-	} else {
-		cout << "No se encontró base de datos. Se creará una nueva al guardar." << endl;
+		if (ExisteArchivo(ruta)) {
+			cout<<"Cargando base de datos..."<< endl;
+			CargarDatosEnMemoria(empresas);
+		} else {
+			cout<<"No se encontró base de datos. Se iniciará vacío y se creará una nueva al guardar"<<endl;
+		}
+	} catch (const exception &e) {
+		cerr << "Error al cargar: "<< e.what()<<endl;
 	}
+	
 	MostrarEmpresa(empresas);
 	
-	GuardarCambios(empresas);
-	
+	// Try-catch para el guardado
+	try {
+		GuardarCambios(empresas);
+		cout<<"Guardado exitoso."<<endl;
+	} catch (const exception &e) {
+		cerr<<"Error al guardar: "<<e.what()<<endl;
+	}
 	
 	return 0;
 }
