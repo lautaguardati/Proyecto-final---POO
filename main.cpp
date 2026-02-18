@@ -7,28 +7,10 @@
 #include <cstring>
 using namespace std;
 
-// 	Usamos esta función para revisar si el archivo no existe para crear uno
-// o es si existe pero no abre por otro problema.
-int RevisarEstadoArchivo (string direc) {
-	// Intentamos abrir en modo lectura binaria ("rb")
-	FILE* file = fopen(direc.c_str(), "rb");
-	
-	if (file != NULL) {
-		// Se abrió correctamente
-		fclose(file);
-		return 0; // Éxito
-	}
-	
-	// Si llegamos aquí, file es NULL. Revisamos errno.
-	switch (errno) {
-	case ENOENT: // Error NO ENTry (No existe el archivo o directorio)
-		return 1; 
-	case EACCES: // Error ACCESs (Permiso denegado)
-		return 2;
-	default:
-		// Otro error (disco lleno, demasiados archivos abiertos, etc.)
-		return 3; 
-	}
+// Función simplificada para verificar archivo
+bool ExisteArchivo(const string& nombre) {
+	ifstream archivo(nombre);
+	return archivo.good();
 }
 
 void CargarDatosEnMemoria (vector<Empresa> &emp) {
@@ -105,7 +87,24 @@ void GuardarCambios(vector<Empresa> &empresas) {
 		archivo.write(Correo, sizeof(Correo));
 		archivo.write(Telefono, sizeof(Telefono));
 		archivo.write((char*) &cantidadProductos, sizeof(cantidadProductos));
-		
+		/*
+		for(int i=0;i<cantidadProductos;i++) { 
+			Producto p = 
+			
+			string auxNombreProd = p.ObtenerNombre();
+			char NombreProd[256];
+			strcpy(NombreProd, auxNombreProd.c_str());
+			
+			int idProd = p.ObtenerID();
+			int stockProd = p.ObtenerStock();
+			float precioProd = p.ObtenerPrecio();
+			
+			archivo.write(NombreProd, sizeof(NombreProd));
+			archivo.write((char*) &idProd, sizeof(idProd));
+			archivo.write((char*) &stockProd, sizeof(stockProd));
+			archivo.write((char*) &precioProd, sizeof(precioProd));
+			
+		}*/
 		vector<Producto> productos = emp.ObtenerListaProductos();
 		for(Producto &p : productos) { 
 			string auxNombreProd = p.ObtenerNombre();
@@ -144,28 +143,20 @@ void MostrarEmpresa(vector<Empresa> &emp, int id = 0,const string &nombre="") {
 	
 	
 int main() {
-	int EstadoArchivo = RevisarEstadoArchivo("lista_prov.dat");
-	// 0 = existe y funciona;
-	// 1 = no existe y 2 = no funciona
-	if (EstadoArchivo) {
-		switch (EstadoArchivo) {
-		case 1: {
-			ofstream crear("lista_prov.dat", ios::binary);
-			crear.close();
-			}
-		case 2: 
-			throw runtime_error("Error: No se tiene permiso para abrir el archivo");
-		case 3:
-			throw runtime_error("Error: el archivo no pudo abrirse.");
-		}
-	}
-	
 	vector<Empresa> empresas;
 	
+	string ruta = "lista_prov.dat";
+	if (ExisteArchivo(ruta)) {
+		cout << "Cargando base de datos..." << endl;
+		CargarDatosEnMemoria(empresas);
+	} else {
+		cout << "No se encontró base de datos. Se creará una nueva al guardar." << endl;
+	}
+	
+	
 	CargarDatosEnMemoria(empresas);
-	
-	MostrarEmpresa(empresas);
-	
+	//Producto p = empresas[0].ObtenerPr
+	//cout<<empresas[0]
 	
 	return 0;
 }
