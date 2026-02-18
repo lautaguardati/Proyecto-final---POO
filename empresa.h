@@ -9,7 +9,6 @@ private:
 	std::string m_nombre;
 	std::string m_correo;
 	std::string m_telefono;
-	int m_cantidadProductos;
 	std::vector<Producto> Productos;
 public:
 	Empresa(int idEmpresa, const std::string &nombre, const std::string &correo, const std::string &telefono, int cantidadProductos) : m_idEmpresa(idEmpresa),
@@ -19,7 +18,8 @@ public:
 	std::string ObtenerCorreo(){return m_correo;};
 	std::string ObtenerTelefono(){return m_telefono;};
 	int ObtenerCantidadProductos(){return m_cantidadProductos;};
-	std::vector<Producto> ObtenerListaProductos(){return Productos;};
+	int ObtenerCantidadProductos();
+	std::vector<Producto>& ObtenerListaProductos() { return Productos; };
 	
 	bool AgregarProducto(const std::string &nombre, int id, int stock, float precio);
 	bool QuitarProducto();
@@ -27,6 +27,10 @@ public:
 	bool ExisteProducto(const std::string &nombre, int id);
 	Producto* BuscarProducto(int pos, const std::string &nombre, int id);
 };
+
+inline int Empresa::ObtenerCantidadProductos() {
+	return Productos.size();
+}
 
 inline bool Empresa::AgregarProducto(const std::string &nombre, int id, int stock, float precio) {
 	if (ExisteProducto(nombre, id)) return false;
