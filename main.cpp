@@ -20,9 +20,9 @@ void CargarDatosEnMemoria (vector<Empresa> &emp) {
 	}
 	while (true) {
 		int idEmpresa;
-		char auxNombre[256];
-		char auxCorreo[256];
-		char auxTelefono[20];
+		char auxNombre[256] = {0};
+		char auxCorreo[256] = {0};
+		char auxTelefono[20] = {0};
 		int CantidadProductos;
 		
 		archivo.read((char*) &idEmpresa, sizeof(idEmpresa));
@@ -43,7 +43,7 @@ void CargarDatosEnMemoria (vector<Empresa> &emp) {
 		Empresa nuevaEmpresa(idEmpresa, nombre, correo, telefono, CantidadProductos);
 		
 		for(int i=0;i<CantidadProductos;i++) {
-			char auxNombreProd[256];
+			char auxNombreProd[256] = {0};
 			int idProducto, stock;
 			float precio;
 			archivo.read(auxNombreProd, sizeof(auxNombreProd));
@@ -60,25 +60,26 @@ void CargarDatosEnMemoria (vector<Empresa> &emp) {
 }
 
 void GuardarCambios(vector<Empresa> &empresas) {
-	if (empresas.size() == 0)
+	if (empresas.empty())
 		throw runtime_error("No se puede guardar sin cargar los datos antes");
 	
 	ofstream archivo("lista_prov.dat", ios::binary | ios::trunc);
-	
+	if (!archivo.is_open()) throw runtime_error("No se pudo abrir el archivo");
 	for (Empresa &emp : empresas) {
 		int id = emp.ObtenerID();
 		
 		string auxNombre = emp.ObtenerNombre();
-		char Nombre[256];
-		strcpy(Nombre, auxNombre.c_str());
+		char Nombre[256] = {0};
+		// Usamos Strncpy para evitar un desvortamiento si el nombre es muy largo
+		strncpy(Nombre, auxNombre.c_str(), 255);
 		
 		string auxCorreo = emp.ObtenerCorreo();
-		char Correo[256];
-		strcpy(Correo, auxCorreo.c_str());
+		char Correo[256] = {0};
+		strncpy(Correo, auxCorreo.c_str(), 255);
 		
 		string auxTelefono = emp.ObtenerTelefono();
-		char Telefono[20];
-		strcpy(Telefono, auxTelefono.c_str());
+		char Telefono[20] = {0};
+		strncpy(Telefono, auxTelefono.c_str(), 19);
 		
 		int cantidadProductos = emp.ObtenerCantidadProductos(); 
 
@@ -87,29 +88,12 @@ void GuardarCambios(vector<Empresa> &empresas) {
 		archivo.write(Correo, sizeof(Correo));
 		archivo.write(Telefono, sizeof(Telefono));
 		archivo.write((char*) &cantidadProductos, sizeof(cantidadProductos));
-		/*
-		for(int i=0;i<cantidadProductos;i++) { 
-			Producto p = 
-			
-			string auxNombreProd = p.ObtenerNombre();
-			char NombreProd[256];
-			strcpy(NombreProd, auxNombreProd.c_str());
-			
-			int idProd = p.ObtenerID();
-			int stockProd = p.ObtenerStock();
-			float precioProd = p.ObtenerPrecio();
-			
-			archivo.write(NombreProd, sizeof(NombreProd));
-			archivo.write((char*) &idProd, sizeof(idProd));
-			archivo.write((char*) &stockProd, sizeof(stockProd));
-			archivo.write((char*) &precioProd, sizeof(precioProd));
-			
-		}*/
-		vector<Producto> productos = emp.ObtenerListaProductos();
+
+		vector<Producto> &productos = emp.ObtenerListaProductos();
 		for(Producto &p : productos) { 
 			string auxNombreProd = p.ObtenerNombre();
-			char NombreProd[256];
-			strcpy(NombreProd, auxNombreProd.c_str());
+			char NombreProd[256] = {0};
+			strncpy(NombreProd, auxNombreProd.c_str(), 255);
 			
 			int idProd = p.ObtenerID();
 			int stockProd = p.ObtenerStock();
@@ -135,6 +119,7 @@ void MostrarEmpresa(vector<Empresa> &emp, int id = 0,const string &nombre="") {
 		cout<<emp[i].ObtenerID()<<": "<<emp[i].ObtenerNombre()<<". Tel: "<<emp[i].ObtenerTelefono();
 		cout<<endl;
 		cout<<"Correo: "<<emp[i].ObtenerCorreo()<<endl<<"Cantidad de Productos: "<<emp[i].ObtenerCantidadProductos()<<endl<<endl;
+		cout<<endl<<i<<endl;
 	}
 }
 	
@@ -157,6 +142,8 @@ int main() {
 	CargarDatosEnMemoria(empresas);
 	//Producto p = empresas[0].ObtenerPr
 	//cout<<empresas[0]
+	
+	MostrarEmpresa(empresas);
 	
 	return 0;
 }

@@ -12,12 +12,11 @@ private:
 	std::vector<Producto> Productos;
 public:
 	Empresa(int idEmpresa, const std::string &nombre, const std::string &correo, const std::string &telefono, int cantidadProductos) : m_idEmpresa(idEmpresa),
-		m_nombre(nombre), m_correo(correo), m_telefono(telefono), m_cantidadProductos(cantidadProductos){}
+		m_nombre(nombre), m_correo(correo), m_telefono(telefono){}
 	int ObtenerID(){return m_idEmpresa;};
 	std::string ObtenerNombre(){return m_nombre;};
 	std::string ObtenerCorreo(){return m_correo;};
 	std::string ObtenerTelefono(){return m_telefono;};
-	int ObtenerCantidadProductos(){return m_cantidadProductos;};
 	int ObtenerCantidadProductos();
 	std::vector<Producto>& ObtenerListaProductos() { return Productos; };
 	
@@ -37,7 +36,6 @@ inline bool Empresa::AgregarProducto(const std::string &nombre, int id, int stoc
 	
 	Producto auxProd(nombre, id, stock, precio);
 	Productos.push_back(auxProd);
-	m_cantidadProductos++;
 	return true;
 }
 
