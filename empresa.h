@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <vector>
 #include <string>
@@ -24,7 +25,7 @@ public:
 	bool QuitarProducto();
 	bool VenderProducto();
 	bool ExisteProducto(const std::string &nombre, int id);
-	Producto* BuscarProducto(int pos, const std::string &nombre, int id);
+	Producto* BuscarProducto(const std::string &nombre, int id);
 };
 
 inline int Empresa::ObtenerCantidadProductos() {
@@ -46,9 +47,9 @@ inline bool Empresa::ExisteProducto(const std::string &nombre, int id) {
 	return false;
 }
 
-inline Producto* Empresa::BuscarProducto(int pos, const std::string &nombre = "", int id = 0) {
+inline Producto* Empresa::BuscarProducto(const std::string &nombre = "", int id = 0) {
 	for (auto &p : Productos) {
-		if (p.ObtenerID() == id || p.ObtenerNombre() == nombre) {
+		if ((id != 0 && p.ObtenerID() == id) || (nombre != "" && p.ObtenerNombre() == nombre)) {
 			return &p;
 		}
 	}

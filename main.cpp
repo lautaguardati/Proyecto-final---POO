@@ -77,7 +77,8 @@ void GuardarCambios(vector<Empresa> &empresas) {
 		
 		string auxNombre = emp.ObtenerNombre();
 		char Nombre[256] = {0};
-		// Usamos Strncpy para evitar un desvortamiento si el nombre es muy largo
+		// Usamos Strncpy y "255" para evitar un desvortamiento si el nombre es
+		// muy largo. Así se nos aseguramos el "\0" en la última posición [255].
 		strncpy(Nombre, auxNombre.c_str(), 255);
 		
 		string auxCorreo = emp.ObtenerCorreo();

@@ -1,6 +1,7 @@
+#pragma once
 #include <iostream>
 #include <string>
-#pragma once
+
 
 class Producto {
 private:
