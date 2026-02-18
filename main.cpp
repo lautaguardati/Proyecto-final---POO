@@ -130,7 +130,10 @@ void MostrarEmpresa(vector<Empresa> &emp, int id = 0,const string &nombre="") {
 		cout<<endl<<endl;
 		return;
 	}
-	
+	if (emp.empty()) {
+		cout<<"No hay empresas cargadas";
+		return;
+	}
 	for(int i=0;i<emp.size();i++) { 
 		cout<<emp[i].ObtenerID()<<": "<<emp[i].ObtenerNombre()<<". Tel: "<<emp[i].ObtenerTelefono();
 		cout<<endl;
@@ -138,8 +141,6 @@ void MostrarEmpresa(vector<Empresa> &emp, int id = 0,const string &nombre="") {
 		cout<<endl<<endl;
 	}
 }
-	
-	
 	
 	
 	
@@ -153,6 +154,8 @@ int main() {
 		cout << "No se encontró base de datos. Se creará una nueva al guardar." << endl;
 	}
 	MostrarEmpresa(empresas);
+	
+	
 	
 	return 0;
 }
