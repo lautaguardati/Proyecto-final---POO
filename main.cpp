@@ -14,19 +14,12 @@ bool ExisteArchivo(const string& nombre) {
 }
 
 void CargarDatosEnMemoria (vector<Empresa> &emp) {
-	fstream archivo("lista_prov.dat", ios::binary | ios::in);
+	ifstream archivo("lista_prov.dat", ios::binary);
 	if (!archivo.is_open()) {
 		throw runtime_error("No se pudo abrir el archivo");
 	}
-	while (true) {
-		int idEmpresa;
-
-		archivo.read((char*) &idEmpresa, sizeof(idEmpresa));
-		// 	El .eof() aparentemente da "true" cuando se hace una lectura fallida de un archivo.
-		// Por eso lo ponemos después de leer el id. Si falla se corta la lectura del archivo y
-		// no se agregan empresas "basura" por error.
-		if (archivo.eof()) break;
-		
+	int idEmpresa;
+	while (archivo.read((char*) &idEmpresa, sizeof(idEmpresa))) {
 		char auxNombre[256] = {0};
 		char auxCorreo[256] = {0};
 		char auxTelefono[20] = {0};
@@ -138,7 +131,7 @@ void GuardarCambios(vector<Empresa> &empresas) {
 	
 void MostrarEmpresa(vector<Empresa> &emp, int id = 0,const string &nombre="") {
 	if (emp.empty()) {
-		cout<<"No hay empresas cargadas";
+		cout<<"No hay empresas cargadas.";
 		return;
 	}
 	
@@ -165,10 +158,16 @@ void MostrarEmpresa(vector<Empresa> &emp, int id = 0,const string &nombre="") {
 		cout<<endl<<endl;
 	}
 }
-	
+
 int main() {
 	vector<Empresa> empresas;
 	string ruta = "lista_prov.dat";
+	/*
+	try {
+		
+		
+	};
+	*/
 	if (ExisteArchivo(ruta)) {
 		cout << "Cargando base de datos..." << endl;
 		CargarDatosEnMemoria(empresas);
