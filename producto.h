@@ -11,7 +11,7 @@ private:
 public:
 	Producto(const std::string &nombre, int id, int stock, float precio) : m_nombre(nombre), m_id(id), m_stock(stock),
 		m_precio(precio){}
-	std::string ObtenerNombre(){return m_nombre;};
+	const std::string& ObtenerNombre()const{return m_nombre;};
 	int ObtenerID(){return m_id;};
 	int ObtenerStock(){return m_stock;};
 	float ObtenerPrecio(){return m_precio;};

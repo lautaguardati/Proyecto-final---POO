@@ -11,12 +11,12 @@ private:
 	std::string m_telefono;
 	std::vector<Producto> Productos;
 public:
-	Empresa(int idEmpresa, const std::string &nombre, const std::string &correo, const std::string &telefono, int cantidadProductos) : m_idEmpresa(idEmpresa),
+	Empresa(int idEmpresa, const std::string &nombre, const std::string &correo, const std::string &telefono) : m_idEmpresa(idEmpresa),
 		m_nombre(nombre), m_correo(correo), m_telefono(telefono){}
 	int ObtenerID(){return m_idEmpresa;};
-	std::string ObtenerNombre(){return m_nombre;};
-	std::string ObtenerCorreo(){return m_correo;};
-	std::string ObtenerTelefono(){return m_telefono;};
+	const std::string& ObtenerNombre() const {return m_nombre;};
+	const std::string& ObtenerCorreo() const {return m_correo;};
+	const std::string& ObtenerTelefono() const {return m_telefono;};
 	int ObtenerCantidadProductos();
 	std::vector<Producto>& ObtenerListaProductos() { return Productos; };
 	
