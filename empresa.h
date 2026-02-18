@@ -55,6 +55,15 @@ inline Producto* Empresa::BuscarProducto(int pos, const std::string &nombre = ""
 	return nullptr;
 }
 
+inline bool Empresa::QuitarProducto() {
+	
+	return true;
+}
+
+inline bool Empresa::VenderProducto() {
+	
+	return true;
+}
 
 
 
