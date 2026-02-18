@@ -7,13 +7,13 @@ private:
 	std::string m_nombre;
 	int m_id;
 	int m_stock;
-	float m_precio;
+	double m_precio;
 public:
-	Producto(const std::string &nombre, int id, int stock, float precio) : m_nombre(nombre), m_id(id), m_stock(stock),
+	Producto(const std::string &nombre, int id, int stock, double precio) : m_nombre(nombre), m_id(id), m_stock(stock),
 		m_precio(precio){}
 	const std::string& ObtenerNombre()const{return m_nombre;};
 	int ObtenerID(){return m_id;};
 	int ObtenerStock(){return m_stock;};
-	float ObtenerPrecio(){return m_precio;};
+	double ObtenerPrecio(){return m_precio;};
 	void ActualizarStock(int cantidad) {m_stock = cantidad;};
 };

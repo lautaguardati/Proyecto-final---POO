@@ -45,7 +45,7 @@ void CargarDatosEnMemoria (vector<Empresa> &emp) {
 		for(int i=0;i<CantidadProductos;i++) {
 			char auxNombreProd[256] = {0};
 			int idProducto, stock;
-			float precio;
+			double precio;
 			archivo.read(auxNombreProd, sizeof(auxNombreProd));
 			archivo.read((char*) &idProducto, sizeof(idProducto));
 			archivo.read((char*) &stock, sizeof(stock));
@@ -100,7 +100,7 @@ void GuardarCambios(vector<Empresa> &empresas) {
 			
 			int idProd = p.ObtenerID();
 			int stockProd = p.ObtenerStock();
-			float precioProd = p.ObtenerPrecio();
+			double precioProd = p.ObtenerPrecio();
 			
 			archivo.write(NombreProd, sizeof(NombreProd));
 			archivo.write((char*) &idProd, sizeof(idProd));
@@ -145,7 +145,6 @@ void MostrarEmpresa(vector<Empresa> &emp, int id = 0,const string &nombre="") {
 	
 int main() {
 	vector<Empresa> empresas;
-	
 	string ruta = "lista_prov.dat";
 	if (ExisteArchivo(ruta)) {
 		cout << "Cargando base de datos..." << endl;
@@ -153,9 +152,7 @@ int main() {
 	} else {
 		cout << "No se encontró base de datos. Se creará una nueva al guardar." << endl;
 	}
-	
 	MostrarEmpresa(empresas);
-	
 	
 	return 0;
 }
