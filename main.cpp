@@ -40,7 +40,7 @@ void CargarDatosEnMemoria (vector<Empresa> &emp) {
 		string correo = auxCorreo;
 		string telefono = auxTelefono;
 		
-		Empresa nuevaEmpresa(idEmpresa, nombre, correo, telefono, CantidadProductos);
+		Empresa nuevaEmpresa(idEmpresa, nombre, correo, telefono);
 		
 		for(int i=0;i<CantidadProductos;i++) {
 			char auxNombreProd[256] = {0};
@@ -65,6 +65,7 @@ void GuardarCambios(vector<Empresa> &empresas) {
 	
 	ofstream archivo("lista_prov.dat", ios::binary | ios::trunc);
 	if (!archivo.is_open()) throw runtime_error("No se pudo abrir el archivo");
+	
 	for (Empresa &emp : empresas) {
 		int id = emp.ObtenerID();
 		
@@ -89,6 +90,8 @@ void GuardarCambios(vector<Empresa> &empresas) {
 		archivo.write(Telefono, sizeof(Telefono));
 		archivo.write((char*) &cantidadProductos, sizeof(cantidadProductos));
 
+		
+		// Pasamos por referencia el vector así no lo copiamos entero
 		vector<Producto> &productos = emp.ObtenerListaProductos();
 		for(Producto &p : productos) { 
 			string auxNombreProd = p.ObtenerNombre();
@@ -111,15 +114,28 @@ void GuardarCambios(vector<Empresa> &empresas) {
 	
 void MostrarEmpresa(vector<Empresa> &emp, int id = 0,const string &nombre="") {
 	if (id != 0 || nombre != ""){
-		
-		
-		//return;
+		int aux = -1;
+		for(int i=0;i<emp.size();i++) { 
+			if(emp[i].ObtenerNombre() == nombre || emp[i].ObtenerID() == id) {
+				aux = i;
+			}
+		}
+		if (aux == -1) {
+			cout<<"No se encontró la empresa";
+			return;
+		}
+		cout<<emp[aux].ObtenerID()<<": "<<emp[aux].ObtenerNombre()<<". Tel: "<<emp[aux].ObtenerTelefono();
+		cout<<endl;
+		cout<<"Correo: "<<emp[aux].ObtenerCorreo()<<endl<<"Cantidad de Productos: "<<emp[aux].ObtenerCantidadProductos()<<endl<<endl;
+		cout<<endl<<endl;
+		return;
 	}
+	
 	for(int i=0;i<emp.size();i++) { 
 		cout<<emp[i].ObtenerID()<<": "<<emp[i].ObtenerNombre()<<". Tel: "<<emp[i].ObtenerTelefono();
 		cout<<endl;
 		cout<<"Correo: "<<emp[i].ObtenerCorreo()<<endl<<"Cantidad de Productos: "<<emp[i].ObtenerCantidadProductos()<<endl<<endl;
-		cout<<endl<<i<<endl;
+		cout<<endl<<endl;
 	}
 }
 	
@@ -138,12 +154,8 @@ int main() {
 		cout << "No se encontró base de datos. Se creará una nueva al guardar." << endl;
 	}
 	
-	
-	CargarDatosEnMemoria(empresas);
-	//Producto p = empresas[0].ObtenerPr
-	//cout<<empresas[0]
-	
 	MostrarEmpresa(empresas);
+	
 	
 	return 0;
 }
