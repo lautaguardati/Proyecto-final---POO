@@ -102,11 +102,13 @@ void GuardarCambios(vector<Empresa> &empresas) {
 			int idProd = p.ObtenerID();
 			int stockProd = p.ObtenerStock();
 			double precioProd = p.ObtenerPrecio();
+			int cantidadVendida = p.ObtenerCantidadVentas();
 			
 			archivo.write(NombreProd, sizeof(NombreProd));
 			archivo.write((char*) &idProd, sizeof(idProd));
 			archivo.write((char*) &stockProd, sizeof(stockProd));
 			archivo.write((char*) &precioProd, sizeof(precioProd));
+			archivo.write((char*) &cantidadVendida, sizeof(cantidadVendida));
 		}
 		
 	}

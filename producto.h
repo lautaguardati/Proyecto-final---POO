@@ -17,6 +17,7 @@ public:
 	int ObtenerID(){return m_id;};
 	int ObtenerStock(){return m_stock;};
 	double ObtenerPrecio(){return m_precio;};
+	int ObtenerCantidadVentas() {return m_cantidadVendida;};
 	void ActualizarStock(int cantidad) {m_stock = cantidad;};
 	void ActualizarPrecio(int cantidad) {m_precio = cantidad;};
 	void VenderProducto() {m_cantidadVendida++;};
