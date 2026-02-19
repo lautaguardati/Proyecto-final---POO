@@ -111,7 +111,6 @@ void GuardarCambios(vector<Empresa> &empresas) {
 		
 	}
 	
-	
 	if (archivo.fail())	{
 		archivo.close();
 		remove(archivoTemporal.c_str()); // Borramos el archivo temporal corrupto

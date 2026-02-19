@@ -22,8 +22,8 @@ public:
 	std::vector<Producto>& ObtenerListaProductos() { return Productos; };
 	
 	bool AgregarProducto(const std::string &nombre, int id, int stock, double precio, int cantidadVendida);
-	bool QuitarProducto();
-	bool VenderProducto(const std::string &nombre, int id);
+	bool QuitarProducto(int id);
+	bool VenderProducto(int id);
 	bool ExisteProducto(const std::string &nombre, int id);
 	Producto* BuscarProducto(const std::string &nombre, int id);
 };
@@ -56,19 +56,25 @@ inline Producto* Empresa::BuscarProducto(const std::string &nombre = "", int id 
 	return nullptr;
 }
 
-inline bool Empresa::QuitarProducto() {
-	
-	return true;
+inline bool Empresa::QuitarProducto(int id) {
+	for(size_t i=0;i<Productos.size();i++) { 
+		if (id == Productos[i].ObtenerID()) {
+			Productos.erase(Productos.begin() + i);
+			return true;
+		}
+	}
+	return false;
 }
 
-inline bool Empresa::VenderProducto(const std::string &nombre = "", int id = 0) {
-	Producto *p = BuscarProducto(nombre, id);
-	if (p == nullptr){
-		return false;
+inline bool Empresa::VenderProducto(int id) {
+	for(Producto &p : Productos) { 
+		if (id == p.ObtenerID()) {
+			p.ActualizarStock((p.ObtenerStock()-1));
+			p.VenderProducto();
+			return true;
+		}
 	}
-	p->ActualizarStock((p->ObtenerStock() - 1));
-	p->VenderProducto();
-	return true;
+	return false;
 }
 
 
