@@ -76,8 +76,3 @@ inline bool Empresa::VenderProducto(int id) {
 	}
 	return false;
 }
-
-
-
-
-
