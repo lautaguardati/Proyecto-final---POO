@@ -14,6 +14,10 @@ bool ExisteArchivo(const string& nombre) {
 }
 
 void CargarDatosEnMemoria (vector<Empresa> &emp) {
+	// Para evitar que se puedan cargar duplicados desde la memoria
+	// vaciamos el array empresas antes de cargar los datos.
+	emp.clear();
+	
 	ifstream archivo("lista_prov.dat", ios::binary);
 	if (!archivo.is_open()) {
 		throw runtime_error("No se pudo abrir el archivo");
