@@ -23,7 +23,7 @@ public:
 	
 	bool AgregarProducto(const std::string &nombre, int id, int stock, double precio, int cantidadVendida);
 	bool QuitarProducto(int id);
-	bool VenderProducto(int id);
+	bool VenderProducto(int id, int cant);
 	bool ExisteProducto(const std::string &nombre, int id);
 	Producto* BuscarProducto(const std::string &nombre, int id);
 };
@@ -66,11 +66,11 @@ inline bool Empresa::QuitarProducto(int id) {
 	return false;
 }
 
-inline bool Empresa::VenderProducto(int id) {
+inline bool Empresa::VenderProducto(int id, int cant) {
 	for(Producto &p : Productos) { 
 		if (id == p.ObtenerID()) {
 			p.ActualizarStock((p.ObtenerStock()-1));
-			p.VenderProducto();
+			p.VenderProducto(cant);
 			return true;
 		}
 	}

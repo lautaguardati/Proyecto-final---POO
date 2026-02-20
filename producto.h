@@ -20,5 +20,5 @@ public:
 	int ObtenerCantidadVentas() {return m_cantidadVendida;};
 	void ActualizarStock(int cantidad) {m_stock = cantidad;};
 	void ActualizarPrecio(int cantidad) {m_precio = cantidad;};
-	void VenderProducto() {m_cantidadVendida++;};
+	void VenderProducto(int cantidad) {m_cantidadVendida+= cantidad;};
 };
