@@ -23,12 +23,14 @@ public:
 	void ActualizarStock(int cantidad) {m_stock = cantidad;};
 	void ActualizarPrecio(int cantidad) {m_precio = cantidad;};
 	void ActualizarVentas(int cantidad) {m_cantidadVendida = cantidad;};
-	void VenderProducto(int cantidad) {
-		m_cantidadVendida+= cantidad; m_ventas += m_precio*cantidad;
-	};
+	void VenderProducto(int cantidad);
 	bool operator<(const Producto& otro) const;
 };
 
 inline bool Producto::operator<(const Producto& otro) const {
 	return this->m_id < otro.m_id;
+}
+
+inline void Producto::VenderProducto(int cantidad) {
+	m_cantidadVendida+= cantidad; m_ventas += m_precio*cantidad;
 }

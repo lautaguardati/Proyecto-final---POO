@@ -30,8 +30,8 @@ public:
 	Producto* BuscarProducto(const std::string &nombre, int id);
 	void OrdenarProductoPorID();
 	void OrdenarProductoPorNombre();
-	void OrdenarEmpresaPorID(vector<Empresa> &emp);
-	void OrdenarEmpresaPorNombre(vector<Empresa> &emp);
+//	void OrdenarEmpresaPorID(vector<Empresa> &emp);
+//	void OrdenarEmpresaPorNombre(vector<Empresa> &emp);
 	double CalcularVentasTotales();
 };
 
@@ -78,7 +78,10 @@ inline bool Empresa::QuitarProducto(int id) {
 inline bool Empresa::VenderProducto(int id, int cant) {
 	for(Producto &p : Productos) { 
 		if (id == p.ObtenerID()) {
-			p.ActualizarStock((p.ObtenerStock()-1));
+			if(p.ObtenerStock() < cant) {
+				return false;
+			}
+			p.ActualizarStock((p.ObtenerStock()-cant));
 			p.VenderProducto(cant);
 			return true;
 		}
@@ -98,7 +101,7 @@ inline void Empresa::OrdenarProductoPorNombre() {
 		return a.ObtenerNombre() < b.ObtenerNombre();
 	});
 }
-
+/*
 inline void Empresa::OrdenarEmpresaPorID(vector<Empresa> &emp){
 	std::sort(emp.begin(), emp.end(), [](Empresa &a, Empresa &b) {
 		return a.ObtenerID() < b.ObtenerID();
@@ -110,7 +113,7 @@ inline void Empresa::OrdenarEmpresaPorNombre(vector<Empresa> &emp){
 		return a.ObtenerNombre() < b.ObtenerNombre();
 	});
 }
-
+*/
 inline double Empresa::CalcularVentasTotales() {
 	double aux = 0;
 	for (Producto &p : Productos) {
