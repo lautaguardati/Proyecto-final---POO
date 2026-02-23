@@ -21,7 +21,8 @@ public:
 	const std::string& ObtenerCorreo() const {return m_correo;};
 	const std::string& ObtenerTelefono() const {return m_telefono;};
 	int ObtenerCantidadProductos();
-	std::vector<Producto>& ObtenerListaProductos(){ return Productos; };
+	const std::vector<Producto>& ObtenerListaProductos()const{ return Productos; };
+	//std::vector<Producto>& ObtenerListaProductos(){ return Productos; };
 	
 	bool AgregarProducto(const std::string &nombre, int id, int stock, double precio, int cantidadVendida, double ventas);
 	bool QuitarProducto(int id);

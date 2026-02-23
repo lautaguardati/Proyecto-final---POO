@@ -98,8 +98,8 @@ void GuardarCambios(vector<Empresa> &empresas) {
 
 		
 		// Pasamos por referencia el vector así no lo copiamos entero
-		vector<Producto> &productos = emp.ObtenerListaProductos();
-		for(Producto &p : productos) { 
+		const vector<Producto> &productos = emp.ObtenerListaProductos();
+		for(const Producto &p : productos) { 
 			string auxNombreProd = p.ObtenerNombre();
 			char NombreProd[256] = {0};
 			strncpy(NombreProd, auxNombreProd.c_str(), 255);
@@ -146,7 +146,7 @@ void MostrarEmpresa(vector<Empresa> &emp, int id = 0,const string &nombre="") {
 	if (id != 0 || nombre != ""){
 		int aux = -1;
 		for(size_t i=0;i<emp.size();i++) { 
-			if(emp[i].ObtenerNombre() == nombre || emp[i].ObtenerID() == id) {
+			if((emp[i].ObtenerNombre() == nombre && nombre != "") ||( emp[i].ObtenerID() == id && id!= 0)) {
 				aux = i;
 			}
 		}
