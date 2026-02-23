@@ -43,15 +43,16 @@ void CargarDatosEnMemoria (vector<Empresa> &emp) {
 		for(int i=0;i<CantidadProductos;i++) {
 			char auxNombreProd[256] = {0};
 			int idProducto, stock, cantidadVendida;
-			double precio;
+			double precio, ventas;
 			archivo.read(auxNombreProd, sizeof(auxNombreProd));
 			archivo.read((char*) &idProducto, sizeof(idProducto));
 			archivo.read((char*) &stock, sizeof(stock));
 			archivo.read((char*) &precio, sizeof(precio));
 			archivo.read((char*) &cantidadVendida, sizeof(cantidadVendida));
+			archivo.read((char*) &ventas, sizeof(ventas));
 			
 			string NombreProd = auxNombreProd;
-			nuevaEmpresa.AgregarProducto(NombreProd, idProducto, stock, precio, cantidadVendida);
+			nuevaEmpresa.AgregarProducto(NombreProd, idProducto, stock, precio, cantidadVendida, ventas);
 		}
 		emp.push_back(nuevaEmpresa);
 	}
@@ -107,14 +108,15 @@ void GuardarCambios(vector<Empresa> &empresas) {
 			int stockProd = p.ObtenerStock();
 			double precioProd = p.ObtenerPrecio();
 			int cantidadVendida = p.ObtenerCantidadVentas();
+			double ventas = p.ObtenerVentas();
 			
 			archivo.write(NombreProd, sizeof(NombreProd));
 			archivo.write((char*) &idProd, sizeof(idProd));
 			archivo.write((char*) &stockProd, sizeof(stockProd));
 			archivo.write((char*) &precioProd, sizeof(precioProd));
 			archivo.write((char*) &cantidadVendida, sizeof(cantidadVendida));
+			archivo.write((char*) &ventas, sizeof(ventas));
 		}
-		
 	}
 	
 	if (archivo.fail())	{
@@ -165,6 +167,15 @@ void MostrarEmpresa(vector<Empresa> &emp, int id = 0,const string &nombre="") {
 	}
 }
 
+void MostrarProductos(Empresa &emp) {
+	const vector<Producto> &prods = emp.ObtenerListaProductos();
+	for (const Producto &p : prods) {
+		cout<<p.ObtenerID()<<": "<<p.ObtenerNombre()<<"."<<endl;
+		cout<<"En stock: "<<p.ObtenerStock()<<"."<<endl;
+		cout<<"Ventas: "<<p.ObtenerCantidadVentas()<<" e ingresos por $"<<p.ObtenerVentas()<<endl;
+	}
+}
+
 int main() {
 	vector<Empresa> empresas;
 	string ruta = "lista_prov.dat";
@@ -190,6 +201,8 @@ int main() {
 	} catch (const exception &e) {
 		cerr<<"Error al guardar: "<<e.what()<<endl;
 	}
+	
+	
 	
 	return 0;
 }
