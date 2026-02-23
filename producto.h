@@ -21,7 +21,7 @@ public:
 	int ObtenerCantidadVentas() const {return m_cantidadVendida;};
 	double ObtenerVentas() const {return m_ventas;};
 	void ActualizarStock(int cantidad) {m_stock = cantidad;};
-	void ActualizarPrecio(int cantidad) {m_precio = cantidad;};
+	void ActualizarPrecio(double cantidad) {m_precio = cantidad;};
 	void ActualizarVentas(int cantidad) {m_cantidadVendida = cantidad;};
 	void VenderProducto(int cantidad);
 	bool operator<(const Producto& otro) const;

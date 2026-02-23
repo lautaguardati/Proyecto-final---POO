@@ -4,7 +4,6 @@
 #include <string>
 #include <algorithm>
 #include "producto.h"
-using namespace std;
 
 class Empresa {
 private:
